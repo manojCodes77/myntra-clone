@@ -5,7 +5,6 @@ import { fetchStatusActions } from '../store/fetchStatusSlice';
 const FetchItems=()=>{
     const fetchStatus = useSelector((store) => store.fetchStatus);
     const dispatch = useDispatch();
-    console.log("fetchStatus",fetchStatus);
     useEffect(()=>{
         if(fetchStatus.fetchDone)return ;
         
@@ -18,10 +17,8 @@ const FetchItems=()=>{
             dispatch(fetchStatusActions.markFetchingFinished());
             dispatch(fetchStatusActions.markFetchDone());
             dispatch(itemsAction.addInitialItems(items));
-            console.log("jai shree ram",items);
         });
         return ()=>{
-            console.log('cleanup');
             controller.abort();
         }
     }

@@ -3,7 +3,9 @@ import { FaFaceGrinHearts } from "react-icons/fa6";
 import { IoBag } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
+import { useSelector } from "react-redux";
 const Header = () => {
+    const bag=useSelector((state)=>state.bag);
     return (
         <>
             <header className="flex flex-row bg-white items-center justify-between border-b-2 border-b-slate-500 flex-nowrap overflow-y-hidden overflow-x-scroll pl-2" >
@@ -19,7 +21,6 @@ const Header = () => {
                     <a href="#">Studio <sup>New</sup></a>
                 </nav>
                 <div className="search_bar flex flex-row gap-1 items-center">
-                    {/* <span className="material-symbols-outlined search_icon">search</span> */}
                     <button><IoMdSearch className="w-9 h-9 bg-zinc-200 p-2" /></button>
                     <input className="search_input px-2 bg-zinc-200 min-w-60 text-sm box-content text-zinc-700 " placeholder="Search for products, brands and more" />
                 </div>
@@ -36,7 +37,7 @@ const Header = () => {
                     <Link className=" flex flex-col justify-start items-center no-underline text-black" to="bag" >
                         <div className="flex flex-row justify-center items-center" >
                         <IoBag />
-                        <span className="bag-item-count">0</span>
+                        <span className="bag-item-count">{bag.length}</span>
                         </div>
                         <span className="action_name">Bag</span>
                     </Link>

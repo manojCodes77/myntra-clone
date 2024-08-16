@@ -1,27 +1,21 @@
+import { useSelector } from "react-redux";
 import BagItem from "../components/BagItem";
 import BagSummary from "../components/BagSummary";
 
 function Bag() {
-    const item = {
-        id: '001',
-        image: 'images/1.jpg',
-        company: 'Carlton London',
-        item_name: 'Rhodium-Plated CZ Floral Studs',
-        original_price: 1045,
-        current_price: 606,
-        discount_percentage: 42,
-        return_period: 14,
-        delivery_date: '10 Oct 2023',
-        rating: {
-          stars: 4.5,
-          count: 1400,
-        }
-      };
+    const bagItems= useSelector((state) => state.bag);
+    const items=useSelector((state)=>state.items);
+    const finalBagItems=items.filter((item)=>bagItems.indexOf(item.id)>=0);
     return (
         <main>
             <div className="bag-page">
-                <div className="bag-items-container">
-                    <BagItem item={item} />
+                <div className="bag-items-container min-h-full">
+                    {
+                        finalBagItems.length === 0 && <div className="empty-bag font-semibold text-3xl flex justify-center items-center">Your bag is empty</div>
+                    }
+                    {finalBagItems.map((item) =>
+                        <BagItem key={item.id} item={item} />
+                    )}
                 </div>
                 <BagSummary/>
             </div>
