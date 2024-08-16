@@ -33,7 +33,7 @@ const Header = () => {
                         <FaFaceGrinHearts />
                         <span className="action_name">Wishlist</span>
                     </div>
-                    <Link className=" flex flex-col justify-start items-center" to="bag">
+                    <Link className=" flex flex-col justify-start items-center no-underline text-black" to="bag" >
                         <div className="flex flex-row justify-center items-center" >
                         <IoBag />
                         <span className="bag-item-count">0</span>
