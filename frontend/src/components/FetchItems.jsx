@@ -6,6 +6,8 @@ import { fetchStatusActions } from '../store/fetchStatusSlice';
 const FetchItems = () => {
     const fetchStatus = useSelector((store) => store.fetchStatus);
     const dispatch = useDispatch();
+
+    const API_URL=import.meta.env.VITE_API_URL;
     
     useEffect(() => {
         if (fetchStatus.fetchDone) return;
@@ -15,7 +17,7 @@ const FetchItems = () => {
         
         dispatch(fetchStatusActions.markFetchingStarted());
         
-        fetch('http://localhost:8080/items', { signal })
+        fetch(API_URL, { signal })
             .then((res) => res.json())
             .then(({ items }) => {
                 dispatch(fetchStatusActions.markFetchingFinished());
