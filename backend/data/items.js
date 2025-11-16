@@ -1,4 +1,5 @@
-const fs = require('node:fs/promises');
+// const fs = require('node:fs/promises');
+import fs from 'node:fs/promises';
 
 async function getStoredItems() {
   const rawFileContent = await fs.readFile('items.json', { encoding: 'utf-8' });
@@ -11,5 +12,4 @@ function storeItems(items) {
   return fs.writeFile('items.json', JSON.stringify({ items: items || [] }));
 }
 
-exports.getStoredItems = getStoredItems;
-exports.storeItems = storeItems;
+export {getStoredItems,storeItems};
