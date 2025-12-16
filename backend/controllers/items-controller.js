@@ -1,7 +1,15 @@
 import prisma from '../config/database.js';
+import { getCache, setCache, invalidateItemsCache, CACHE_KEYS } from '../services/cacheService.js';
 
 async function getStoredItems() {
   try {
+    // Check cache first
+    const cachedItems = await getCache(CACHE_KEYS.ALL_ITEMS);
+    if (cachedItems) {
+      return cachedItems;
+    }
+
+    // If not in cache, fetch from database
     const items = await prisma.item.findMany({
       orderBy: {
         createdAt: 'desc',
@@ -9,7 +17,7 @@ async function getStoredItems() {
     });
 
     // Transform data to match frontend format
-    return items.map((item) => ({
+    const transformedItems = items.map((item) => ({
       id: item.id,
       image: item.image,
       company: item.company,
@@ -24,6 +32,11 @@ async function getStoredItems() {
         count: item.rating_count,
       },
     }));
+
+    // Cache the results
+    await setCache(CACHE_KEYS.ALL_ITEMS, transformedItems);
+
+    return transformedItems;
   } catch (error) {
     console.error('Error fetching items:', error);
     throw error;
@@ -77,6 +90,9 @@ async function storeItem(itemData) {
       },
     });
 
+    // Invalidate items cache
+    await invalidateItemsCache();
+
     // Transform to frontend format
     return {
       id: newItem.id,
@@ -104,6 +120,10 @@ async function deleteItem(id) {
     await prisma.item.delete({
       where: { id },
     });
+
+    // Invalidate items cache
+    await invalidateItemsCache();
+
     return true;
   } catch (error) {
     console.error('Error deleting item:', error);
@@ -130,6 +150,9 @@ async function updateItem(id, itemData) {
       where: { id },
       data: updateData,
     });
+
+    // Invalidate items cache
+    await invalidateItemsCache();
 
     // Transform to frontend format
     return {

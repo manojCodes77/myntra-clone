@@ -4,14 +4,18 @@ import cors from 'cors';
 import { getStoredItems, getItemById, storeItem, deleteItem, updateItem } from './controllers/items-controller.js';
 import upload from './middleware/upload.js';
 import { uploadToCloudinary, deleteFromCloudinary } from './utils/imageUpload.js';
+import { getRedisClient } from './config/redis.js';
 
 dotenv.config();
+
+// Initialize Redis connection on startup
+getRedisClient();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true
 }));
 
